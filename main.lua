@@ -1,112 +1,26 @@
 Object = require "classic"
 local boardModule = require("board")
+local settings = require("settings")
+local game = require("game")
 local Pawn = require("pieces.pawn")
 local Queen = require("pieces.queen")
 local Bishop = require("pieces.bishop")
 local Tower = require("pieces.tower")
 local Knight = require("pieces.knight")
-local King = require("pieces.king")`
+local King = require("pieces.king")
 local Checker = require("pieces.checker")
 local Movement = require("movement")
 
 -- love.load is called once at the start
 function love.load()
-    love.window.setMode(800, 600, {resizable=true, vsync=0, minwidth=400, minheight=300})
-    -- tile settings
-    BoardSize = 8
-    TileSize = 60 -- Each tile is 80x80 pixels
-    
-    -- colors
-    Lightcolor = { 1, 1, 1 }               -- White tiles
-    Darkcolor = { 0.45, 0.45, 0.45 }          -- Black tiles
-
-    -- Initialize the tile
     tile = boardModule.init(BoardSize)
-
-    -- Додаємо короля
-    --tile[4][1] = King.new("white")  -- Білий король
-    tile[4][8] = King.new("black")  -- Чорний король
-    -- Додаємо ферзів
-    --tile[5][1] = Queen.new("white") -- Білий ферзь
-    tile[5][8] = Queen.new("black") -- Чорний ферзь
-    -- Додаємо cлонів
-    --tile[6][1] = Bishop.new("white") -- Білий слон
-    --tile[3][1] = Bishop.new("white") -- Білий слон
-    tile[6][8] = Bishop.new("black") -- Чорний слон
-    tile[3][8] = Bishop.new("black") -- Чорний слон
-    -- Додаємо ладії
-    --tile[1][1] = Tower.new("white") -- Біла лад'я
-    --tile[8][1] = Tower.new("white") -- Біла лад'я
-    tile[1][8] = Tower.new("black") -- Чорна лад'я
-    tile[8][8] = Tower.new("black") -- Чорна лад'я
-    -- Додаємо коней
-    --tile[2][1] = Knight.new("white") -- Біла лад'я
-    --tile[7][1] = Knight.new("white") -- Біла лад'я
-    tile[2][8] = Knight.new("black") -- Чорна лад'я
-    tile[7][8] = Knight.new("black") -- Чорна лад'я
-
-    for x = 1, BoardSize do
-        --tile[x][2] = Pawn.new("white") -- White pawns
-        tile[x][7] = Pawn.new("black") -- Black pawns
-    end
-
-    for y = 1, 3 do
-        for x = 1, BoardSize do
-            tile [x][y] = Checker.new("white")
-        end
-        y = y + 1
-    end
-
-    selectedPiece = nil
-    selectedX, selectedY = nil, nil
-    draggingPiece = false
-    mouseOffsetX, mouseOffsetY = 0, 0
-    currentPlayer = nil -- Поточний гравець ("white" або "black")
-    gameStarted = false -- Чи гра почалася
-
-    -- Випадково обираємо першого гравця
-    math.randomseed(os.time())
-    currentPlayer = math.random(2) == 1 and "white" or "black"
-    gameStarted = true
-
-    -- Завантажуємо окремі зображення для фігур
-    pieceImages = {
-        white = {
-            king = love.graphics.newImage("sprites/white_king.png"),
-            queen = love.graphics.newImage("sprites/white_queen.png"),
-            bishop = love.graphics.newImage("sprites/white_bishop.png"),
-            tower = love.graphics.newImage("sprites/white_tower.png"),
-            knight = love.graphics.newImage("sprites/white_knight.png"),
-            pawn = love.graphics.newImage("sprites/white_pawn.png"),
-            checker = love.graphics.newImage("sprites/white_checker.png"),
-        },
-        black = {
-            king = love.graphics.newImage("sprites/black_king.png"),
-            queen = love.graphics.newImage("sprites/black_queen.png"),
-            bishop = love.graphics.newImage("sprites/black_bishop.png"),
-            tower = love.graphics.newImage("sprites/black_tower.png"),
-            knight = love.graphics.newImage("sprites/black_knight.png"),
-            pawn = love.graphics.newImage("sprites/black_pawn.png"),
-        }
-    }
-
-    -- Initialize player points
-    whitePoints = 0
-    blackPoints = 0
-
-    -- Define abilities and their costs
-    abilities = {
-        { name = "Extra Move", cost = 3 },
-        { name = "Shield (Protect a Piece)", cost = 6 },
-        { name = "Revive Piece", cost = 10 },
-        { name = "Destroy Opponent Piece", cost = 15 }
-    }
+    settings.init()
+    game.init()
 end
 
--- love.draw is called every frame to render
 function love.draw()
     -- Draw the board
-    boardModule.draw(BoardSize, TileSize, Lightcolor, Darkcolor)
+    boardModule.draw(BoardSize, TileSize)
 
     -- Draw pieces
     for x = 1, BoardSize do
@@ -217,10 +131,11 @@ function love.mousereleased(mx, my, button)
                     King.kingCount = King.Count - 1
                 end
 
-                if    
+                --if    
                 -- Оновлюємо позицію фігури
-                tile[selectedX][selectedY] = nil
-                tile[x][y] = selectedPiece
+                --tile[selectedX][selectedY] = nil
+                --tile[x][y] = selectedPiece
+                --en
 
                  -- Позначаємо, що король/тура вже рухалися
                 if selectedPiece.type == "king" or selectedPiece.type == "tower" then
@@ -270,16 +185,6 @@ function love.keypressed(key)
             promotionPiece = nil
             currentPlayer = (currentPlayer == "white") and "black" or "white"
         end
-    end
-
-    if key == "0" then
-        activateAbility(1, currentPlayer)
-    elseif key == "2" then
-        activateAbility(2, currentPlayer)
-    elseif key == "3" then
-        activateAbility(3, currentPlayer)
-    elseif key == "4" then
-        activateAbility(4, currentPlayer)
     end
 
 end

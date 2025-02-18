@@ -50,7 +50,7 @@ function Movement.isFriendlyPiece(x, y, tile, piece)
     return targetPiece ~= nil and targetPiece.color == piece.color
 end
 
-function Movement.queen_moves()
+--function Movement.queen_moves()
     
 
 
