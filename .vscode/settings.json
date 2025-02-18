@@ -1,0 +1,5 @@
+{
+  "Lua.diagnostics.globals": ["ariva", "love", "draggingPiece"],
+  "pixelbyte.love2d.runOnSave": true,
+  "Lua.diagnostics.disable": ["redundant-value"]
+}
