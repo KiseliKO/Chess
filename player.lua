@@ -1,1 +1,0 @@
-kingCount = 1

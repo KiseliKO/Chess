@@ -1,34 +1,35 @@
-local Pawn = {}
+local Piece = require "piece"
+local Pawn = Piece:extend()
 
-function Pawn.new(color)
-    return {
-        type = "pawn",
-        color = color,
-        cost = 1,
-        hasMoved = false
-    }
+function Pawn:new(color, x, y)
+    Pawn.super.new(self, "pawn", faction, color, 1, x, y)
+    self.direction = (color == "white") and 1 or -1  -- Білий → 1, Чорний → -1
 end
 
-function Pawn.isValidMove(pawn, startX, startY, endX, endY, tile)
-    local direction = (pawn.color == "white") and 1 or -1
-    local startRow = (pawn.color == "white") and 2 or 7
+function Pawn:getMoves(tile)
+    local moves = {}
 
-    -- Standard move (1 square forward)
-    if startX == endX and endY == startY + direction then
-        return tile[endX][endY] == nil
+    -- Хід вперед на 1 клітинку
+    if not tile[self.x][self.y + self.direction] then
+        table.insert(moves, {self.x, self.y + self.direction})
     end
 
-    -- Initial two-square move
-    if startX == endX and endY == startY + 2 * direction and startY == startRow then
-        return tile[endX][endY] == nil and tile[endX][startY + direction] == nil
+    -- Подвійний хід на старті
+    if (self.y == 2 and self.color == "white") or (self.y == 7 and self.color == "black") then
+        if not tile[self.x][self.y + self.direction] and not tile[self.x][self.y + 2 * self.direction] then
+            table.insert(moves, {self.x, self.y + 2 * self.direction})
+        end
     end
 
-    -- Capture move (diagonally)
-    if math.abs(endX - startX) == 1 and endY == startY + direction then
-        return tile[endX][endY] ~= nil and tile[endX][endY].color ~= pawn.color
+    -- Взяття по діагоналі
+    for _, dx in ipairs({-1, 1}) do
+        local targetX, targetY = self.x + dx, self.y + self.direction
+        if tile[targetX] and tile[targetX][targetY] and tile[targetX][targetY].color ~= self.color then
+            table.insert(moves, {targetX, targetY})
+        end
     end
 
-    return false
+    return moves
 end
 
 return Pawn

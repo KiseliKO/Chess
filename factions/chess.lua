@@ -1,34 +1,45 @@
-local Faction = require "faction"
-local Piece = require "piece"
-local Movement = require "movement"
+local ChessFaction = Class:extend()
+local Queen = require "queen"
+local King = require "king"
+local Bishop = require "bishop"
+local Knight = require "knight"
+local Rook = require "rook"
+local Pawn = require "pawn"
 
-function LoadChess (color, tile)
-    local pieces = {}
-
-    if color == "white" then
-        table.insert(pieces, Piece("queen", color, love.graphics.newImage("sprites/white_queen.png"), 9, tile[5][1], Movement.queen_moves))
-        table.insert(pieces, Piece("king", color, love.graphics.newImage("sprites/white_king.png"), 9, tile[4][1], Movement.king_moves))
-        table.insert(pieces, Piece("bishop", color, love.graphics.newImage("sprites/white_bishop.png"), 3, tile[3][1], Movement.bishop_moves))
-        table.insert(pieces, Piece("bishop", color, love.graphics.newImage("sprites/white_bishop.png"), 3, tile[6][1], Movement.bishop_moves))
-        table.insert(pieces, Piece("knight", color, love.graphics.newImage("sprites/white_knight.png"), 3, tile[2][1], Movement.knight_moves))
-        table.insert(pieces, Piece("knight", color, love.graphics.newImage("sprites/white_knight.png"), 3, tile[7][1], Movement.knight_moves))
-        table.insert(pieces, Piece("rook", color, love.graphics.newImage("sprites/white_rook.png"), 6, tile[1][1], Movement.rook_moves))
-        table.insert(pieces, Piece("rook", color, love.graphics.newImage("sprites/white_rook.png"), 6, tile[8][1], Movement.rook_moves))
-        for i = 1, 8 do
-            table.insert(pieces, Piece("pawn", color, love.graphics.newImage("sprites/white_pawn.png"), 1, tile[i][2], Movement.pawn_moves))
-        end
-    else
-        table.insert(pieces, Piece("queen", color, love.graphics.newImage("sprites/black_queen.png"), 9, tile[5][8], Movement.queen_moves))
-        table.insert(pieces, Piece("king", color, love.graphics.newImage("sprites/black_queen.png"), 9, tile[4][1], Movement.king_moves))
-        table.insert(pieces, Piece("bishop", color, love.graphics.newImage("sprites/black_bishop.png"), 3, tile[3][8], Movement.bishop_moves))
-        table.insert(pieces, Piece("bishop", color, love.graphics.newImage("sprites/black_bishop.png"), 3, tile[6][8], Movement.bishop_moves))
-        table.insert(pieces, Piece("knight", color, love.graphics.newImage("sprites/black_knight.png"), 3, tile[2][8], Movement.knight_moves))
-        table.insert(pieces, Piece("knight", color, love.graphics.newImage("sprites/black_knight.png"), 3, tile[7][8], Movement.knight_moves))
-        table.insert(pieces, Piece("rook", color, love.graphics.newImage("sprites/black_rook.png"), 6, tile[1][8], Movement.rook_moves))
-        table.insert(pieces, Piece("rook", color, love.graphics.newImage("sprites/black_rook.png"), 6, tile[8][8], Movement.rook_moves))
-        for i = 1, 8 do
-            table.insert(pieces, Piece("pawn", color, love.graphics.newImage("sprites/black_pawn.png"), 1, tile[i][7], Movement.pawn_moves))
-        end
-    end
-    return Faction("Chess", color, pieces)
+function ChessFaction:new(color)
+    ChessFaction.super.new(self, "Chess", color)
+    self.color = color
+    self.pieces = self:initializePieces()
 end
+
+function ChessFaction:initializePieces()
+    -- Створюємо фігури
+    local pieces = {
+        Queen(self.factionname, self.color, 5, (self.color == "white") and 1 or 8),
+        King(self.factionname, self.color, 4, (self.color == "white") and 1 or 8),
+        Bishop(self.factionname, self.color, 3, (self.color == "white") and 1 or 8),
+        Bishop(self.factionname, self.color, 6, (self.color == "white") and 1 or 8),
+        Knight(self.factionname, self.color, 2, (self.color == "white") and 1 or 8),
+        Knight(self.factionname, self.color, 7, (self.color == "white") and 1 or 8),
+        Rook(self.factionname, self.color, 1, (self.color == "white") and 1 or 8),
+        Rook(self.factionname, self.color, 8, (self.color == "white") and 1 or 8)
+    }
+
+    for i = 1, boardSize do
+        table.insert(pieces, Pawn(self.factionname, self.color, (self.color == "white") and 2 or 7))
+    return pieces
+    end
+end
+
+function ChessFaction:getPieces()
+    return self.pieces
+end
+
+function ChessFaction:placePieces()
+    local startX, startY = nil
+    for _, i inpairs(pieces) do
+        tile[pieces[i].x][pieces[i].y] = pieces[i]
+    end
+end
+
+return ChessFaction
