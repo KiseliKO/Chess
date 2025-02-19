@@ -38,7 +38,7 @@ function game.draw()
         for y = 1, BoardSize do
             if tile[x][y] and not (draggingPiece and selectedX == x and selectedY == y) then
                 local piece = tile[x][y]
-                local image = Sprites.pieceImages[piece.faction][piece.color][piece.name] -- Отримуємо зображення для фігури
+                local image = Sprites.pieceImages[piece.faction][piece.color][piece.piecename] -- Отримуємо зображення для фігури
                 love.graphics.draw(image, (x - 1) * TileSize, (y - 1) * TileSize)
             end
         end

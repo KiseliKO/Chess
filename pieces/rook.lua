@@ -1,7 +1,7 @@
 local Piece = require "piece"
 local Rook = Piece:extend()
 
-function Rook:new(color, x, y)
+function Rook:new(faction, color, x, y)
     Rook.super.new(self, "rook", faction, color, 6, x, y)
     local hasMoved = false
 end
