@@ -1,6 +1,6 @@
 local Sprites = {}
 
-local pieceImages = {
+Sprites.PieceImages = {
     Chess = {
         white = {
             king = love.graphics.newImage("sprites/white_king.png"),

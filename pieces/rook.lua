@@ -1,9 +1,8 @@
-local Piece = require "piece"
+local Piece = require "pieces.piece"
 local Rook = Piece:extend()
 
 function Rook:new(faction, color, x, y)
     Rook.super.new(self, "rook", faction, color, 6, x, y)
-    local hasMoved = false
 end
 
 function Rook:getMoves(tile)
@@ -19,7 +18,7 @@ function Rook:getMoves(tile)
 
     for _, dir in ipairs(directions) do
         local dx, dy = dir[1], dir[2]
-        for i = 1, boardSize do
+        for i = 1, BoardSize do
             local targetX, targetY = self.x + dx * i, self.y + dy * i
 
             -- Перевіряємо межі дошки

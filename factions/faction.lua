@@ -1,7 +1,7 @@
 local Faction = Object:extend()
 
-function Faction:new(factionname, color, pieces)
-    self.factionname = factionname
+function Faction:new(name, color, pieces)
+    self.name = name
     self.color = color
     self.pieces = pieces
 end

@@ -1,12 +1,9 @@
 Object = require "classic"
-local boardModule = require("core.board")
 local confModule = require("conf")
 local gameModule = require("core.game")
 
 function love.load()
     math.randomseed(os.time())
-
-    tile = boardModule.init(BoardSize)
     confModule.init()
     gameModule.init()
 end

@@ -1,3 +1,4 @@
+local boardModule = require "core.board"
 local conf = {}
 
 function conf.init()
@@ -5,6 +6,7 @@ function conf.init()
 
     BoardSize = 8
     TileSize = 60
+    tile = boardModule.init(BoardSize)
 end
 
 return conf

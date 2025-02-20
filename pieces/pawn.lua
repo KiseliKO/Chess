@@ -1,7 +1,7 @@
-local Piece = require "piece"
+local Piece = require "pieces.piece"
 local Pawn = Piece:extend()
 
-function Pawn:new(color, x, y)
+function Pawn:new(faction, color, x, y)
     Pawn.super.new(self, "pawn", faction, color, 1, x, y)
     self.direction = (color == "white") and 1 or -1  -- Білий → 1, Чорний → -1
 end

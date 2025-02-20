@@ -1,19 +1,19 @@
 local Piece = Object:extend()
 
-function Piece:new(piecename, faction, color, cost, x, y, moves)
-    self.piecename = piecename
+function Piece:new(name, faction, color, cost, x, y, moves)
+    self.name = name
     self.faction = faction
     self.color = color
     self.cost = cost
     self.moves = moves or {}
     self.x = x or 0
     self.y = y or 0
-    local hasMoved = false
+    self.hasMoved = false
 end
 
 function Piece:move(targetX, targetY)
     self.x, self.y = targetX, targetY
-    local hasMoved = true
+    self.hasMoved = true
 end
 
 function Piece:canMove(targetX, targetY)
