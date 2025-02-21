@@ -1,10 +1,10 @@
 local Piece = Object:extend()
 
 function Piece:new(name, faction, color, cost, x, y, moves)
-    self.name = name
-    self.faction = faction
-    self.color = color
-    self.cost = cost
+    self.name = name or "NonNamed"
+    self.faction = faction or "NonFaction"
+    self.color = color or nil
+    self.cost = cost or 0
     self.moves = moves or {}
     self.x = x or 0
     self.y = y or 0
