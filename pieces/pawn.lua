@@ -1,35 +1,45 @@
 local Piece = require "pieces.piece"
+local promoteUI = require "promoteUI"
 local Pawn = Piece:extend()
 
 function Pawn:new(faction, color, x, y)
     Pawn.super.new(self, "pawn", faction, color, 1, x, y)
-    self.direction = (color == "white") and 1 or -1  -- Білий → 1, Чорний → -1
+    self.direction = (self.color == "white") and 1 or -1  -- Білий → 1, Чорний → -1
 end
 
-function Pawn:getMoves(tile)
-    local moves = {}
-
-    -- Хід вперед на 1 клітинку
-    if not tile[self.x][self.y + self.direction] then
-        table.insert(moves, {self.x, self.y + self.direction})
+function Pawn:getMoves()
+    self.moves = {}
+    
+    
+    if tile[self.x][self.y + self.direction] == nil then
+            table.insert(self.moves, {self.x, self.y + self.direction})
+            if tile[self.x][self.y + self.direction * 2] == nil and self.hasMoved == false then
+                table.insert(self.moves, {self.x, self.y + self.direction * 2})
+            end
     end
 
-    -- Подвійний хід на старті
-    if (self.y == 2 and self.color == "white") or (self.y == 7 and self.color == "black") then
-        if not tile[self.x][self.y + self.direction] and not tile[self.x][self.y + 2 * self.direction] then
-            table.insert(moves, {self.x, self.y + 2 * self.direction})
+    local diagonalAttack = {-1, 1}
+    for _, dx in ipairs(diagonalAttack) do
+     
+        if tile[self.x + dx] and tile[self.x + dx][self.y + self.direction] and tile[self.x + dx][self.y + self.direction].color ~= self.color then
+                table.insert(self.moves, {self.x + dx, self.y + self.direction})
         end
     end
 
-    -- Взяття по діагоналі
-    for _, dx in ipairs({-1, 1}) do
-        local targetX, targetY = self.x + dx, self.y + self.direction
-        if tile[targetX] and tile[targetX][targetY] and tile[targetX][targetY].color ~= self.color then
-            table.insert(moves, {targetX, targetY})
-        end
-    end
+    return self.moves
+end
 
-    return moves
+function Pawn:move(targetX, targetY)
+    tile[targetX][targetY] = tile[self.x][self.y]
+    tile[self.x][self.y] = nil
+    self.x, self.y = targetX, targetY
+    self.hasMoved = true
+    
+    if (self.color == "white" and self.y == 8) or (self.color == "black" and self.y == 1) then
+        promoteUI.open(self)
+    else 
+        currentPlayer = currentPlayer == player1 and player2 or player1
+    end
 end
 
 return Pawn

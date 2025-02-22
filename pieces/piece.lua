@@ -12,8 +12,11 @@ function Piece:new(name, faction, color, cost, x, y, moves)
 end
 
 function Piece:move(targetX, targetY)
+    tile[targetX][targetY] = tile[self.x][self.y]
+    tile[self.x][self.y] = nil
     self.x, self.y = targetX, targetY
     self.hasMoved = true
+    currentPlayer = currentPlayer == player1 and player2 or player1
 end
 
 function Piece:canMove(targetX, targetY)
@@ -24,6 +27,19 @@ function Piece:canMove(targetX, targetY)
         end
     end
     return false
+end
+
+function Piece:takePiece(targetX, targetY)
+    local targetPiece = tile[targetX][targetY]
+    if targetPiece then
+        if currentPlayer.color == "white" then
+            whitePoints = whitePoints + targetPiece.cost
+        else
+            blackPoints = blackPoints + targetPiece.cost
+        end
+
+        tile[targetX][targetY] = nil
+    end
 end
 
 return Piece

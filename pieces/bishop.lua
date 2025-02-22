@@ -5,8 +5,8 @@ function Bishop:new(faction, color, x, y)
     Bishop.super.new(self, "bishop", faction, color, 3, x, y)
 end
 
-function Bishop:getMoves(tile)
-    local moves = {}
+function Bishop:getMoves()
+    self.moves = {}
 
     -- Всі можливі напрямки: вниз, вгору, вправо, вліво
     local directions = {
@@ -20,29 +20,27 @@ function Bishop:getMoves(tile)
 
     for _, dir in ipairs(directions) do
         local dx, dy = dir[1], dir[2]
-        for i = 1, BishopoardSize do
+        for i = 1, BoardSize do
             local targetX, targetY = self.x + dx * i, self.y + dy * i
 
-            -- Перевіряємо межі дошки
-            if not tile[targetX] or not tile[targetX][targetY] then
+            if (0 >= targetX or targetX > BoardSize) or (0 >= targetY or targetY > BoardSize) then
                 break
             end
 
-            -- Перевіряємо, чи можемо рухатися в цю клітинку
-            if tile[targetX][targetY].color == self.color then
+            if tile[targetX][targetY] and tile[targetX][targetY].color == self.color then
                 break
             end
 
-            table.insert(moves, {targetX, targetY})
+            table.insert(self.moves, {targetX, targetY})
 
             -- Якщо тут стоїть ворожа фігура, зупиняємось
-            if tile[targetX][targetY] then
+            if tile[targetX][targetY] and tile[targetX][targetY].color ~= self.color then
                 break
             end
         end
     end
 
-    return moves
+    return self.moves
 end
 
 return Bishop

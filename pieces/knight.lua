@@ -5,8 +5,8 @@ function Knight:new(faction, color, x, y)
     Knight.super.new(self, "knight", faction, color, 3, x, y)
 end
 
-function Knight:getMoves(tile)
-    local moves = {}
+function Knight:getMoves()
+    self.moves = {}
 
     -- Всі можливі напрямки: вниз, вгору, вправо, вліво
     local directions = {
@@ -25,12 +25,17 @@ function Knight:getMoves(tile)
         local targetX, targetY = self.x + dx, self.y + dy
 
             -- Перевіряємо межі дошки i чи не стоїть своя фігура
-            if tile[targetX] or tile[targetX][targetY] and (tile[targetX][targetY].color ~= self.color) then
-                table.insert(moves, {targetX, targetY})
+            if (0 < targetX and targetX <= BoardSize) and (0 < targetY and targetY <= BoardSize) then
+                if tile[targetX][targetY] and tile[targetX][targetY].color ~= self.color then 
+                    table.insert(self.moves, {targetX, targetY})
+                end
+                if tile[targetX][targetY] == nil then
+                    table.insert(self.moves, {targetX, targetY})
+                end
             end
     end
 
-    return moves
+    return self.moves
 end
 
 return Knight

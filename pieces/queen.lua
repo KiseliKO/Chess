@@ -5,8 +5,8 @@ function Queen:new(faction, color, x, y)
     Queen.super.new(self, "queen", faction, color, 8, x, y)
 end
 
-function Queen:getMoves(tile)
-    local moves = {}
+function Queen:getMoves()
+    self.moves = {}
 
     -- Всі можливі напрямки: вниз, вгору, вправо, вліво
     local directions = {
@@ -27,26 +27,24 @@ function Queen:getMoves(tile)
         for i = 1, BoardSize do
             local targetX, targetY = self.x + dx * i, self.y + dy * i
 
-            -- Перевіряємо межі дошки
-            if not tile[targetX] or not tile[targetX][targetY] then
+            if (0 >= targetX or targetX > BoardSize) or (0 >= targetY or targetY > BoardSize) then
                 break
             end
 
-            -- Перевіряємо, чи можемо рухатися в цю клітинку
-            if tile[targetX][targetY].color == self.color then
+            if tile[targetX][targetY] and tile[targetX][targetY].color == self.color then
                 break
             end
 
-            table.insert(moves, {targetX, targetY})
+            table.insert(self.moves, {targetX, targetY})
 
             -- Якщо тут стоїть ворожа фігура, зупиняємось
-            if tile[targetX][targetY] then
+            if tile[targetX][targetY] and tile[targetX][targetY].color ~= self.color then
                 break
             end
         end
     end
 
-    return moves
+    return self.moves
 end
 
 return Queen
