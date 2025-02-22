@@ -1,4 +1,5 @@
 local ChessFaction = require "factions.chess"
+local CheckersFaction = require "factions.checkers"
 local boardModule = require "core.board"
 local Sprites = require "sprites.sprites"
 local promoteUI = require "promoteUI"
@@ -11,7 +12,7 @@ local draggingPiece = false
 local mouseOffsetX, mouseOffsetY = 0, 0
 
 function game.init()
-    player1 = ChessFaction("white")
+    player1 = CheckersFaction("white")
     player2 = ChessFaction("black")
     -- Випадково обираємо першого гравця
     currentPlayer = math.random(2) == 1 and player1 or player2

@@ -17,7 +17,15 @@ Sprites.PieceImages = {
             rook = love.graphics.newImage("sprites/black_tower.png"),
             knight = love.graphics.newImage("sprites/black_knight.png"),
             pawn = love.graphics.newImage("sprites/black_pawn.png"),
-        }
+        },
+    },
+    Checkers = {
+        white = {
+            checker = love.graphics.newImage("sprites/white_checker.png"),
+        },
+        black = {
+            checker = love.graphics.newImage("sprites/black_checker.png"),
+        },
     }
 }
 
