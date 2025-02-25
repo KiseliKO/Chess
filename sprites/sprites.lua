@@ -22,9 +22,11 @@ Sprites.PieceImages = {
     Checkers = {
         white = {
             checker = love.graphics.newImage("sprites/white_checker.png"),
+            checker_king = love.graphics.newImage("sprites/white_checker_king.png"),
         },
         black = {
             checker = love.graphics.newImage("sprites/black_checker.png"),
+            checker_king = love.graphics.newImage("sprites/black_checker_king.png"),
         },
     }
 }

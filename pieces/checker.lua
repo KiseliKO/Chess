@@ -1,4 +1,5 @@
 local Piece = require "pieces.piece"
+local CheckerKing = require "pieces.checker_king"
 local Checker = Piece:extend()
 
 function Checker:new(faction, color, x, y)
@@ -15,6 +16,10 @@ function Checker:getMoves()
         {0, -1}, -- Вгору
         {1, 0},  -- Вправо
         {-1, 0},  -- Вліво
+        {1, 1},
+        {-1, 1},
+        {1, -1},
+        {-1, -1},
         {2, -2},
         {2, 2},
         {-2, -2},
@@ -32,6 +37,9 @@ function Checker:getMoves()
                     end
                 elseif tile[targetX][targetY] == nil then 
                     table.insert(self.moves, {targetX, targetY})
+
+                elseif (targetX == BoardSize or targetX == 1 or targetY == 1 or targetY == BoardSize) and (math.abs(self.x - targetX) == 1 and math.abs(self.y - targetY) == 1) and tile[targetX][targetY] and tile[targetX][targetY].color ~= self.color then
+                    table.insert(self.moves, {targetX, targetY})
                 end
             end
             
@@ -43,18 +51,31 @@ end
 function Checker:move(targetX, targetY)
     tile[targetX][targetY] = tile[self.x][self.y]
     tile[self.x][self.y] = nil
-    if (math.abs(self.x - targetX) == 2) then
-        print("true")
-        if currentPlayer.color == "white" then
-            whitePoints = whitePoints + tile[(targetX + self.x) / 2][(targetY + self.y) / 2].cost
-        else
-            blackPoints = blackPoints + tile[(targetX + self.x) / 2][(targetY + self.y) / 2].cost
-        end
-        tile[(targetX + self.x) / 2][(targetY + self.y) / 2] = nil
+
+    if (self.color == "white" and targetY == 8) or (self.color == "black" and targetY == 1) then
+        tile[targetX][targetY] = nil
+        local newPiece = CheckerKing(CurrentPlayer.color, targetX, targetY)
+        tile[targetX][targetY] = newPiece
+        table.insert(CurrentPlayer.pieces, newPiece)
+        print("Checker promoted to CheckerKing at:", targetX, targetY)
     end
 
+    if (math.abs(self.x - targetX) == 2) then
+        print("true")
+        if CurrentPlayer.color == "white" then
+            Player1.points = Player1.points + tile[(targetX + self.x) / 2][(targetY + self.y) / 2].cost
+        else
+            Player2.points = Player2.points + tile[(targetX + self.x) / 2][(targetY + self.y) / 2].cost
+        end
+        tile[(targetX + self.x) / 2][(targetY + self.y) / 2] = nil
+
+    else
+        CurrentPlayer = CurrentPlayer == Player1 and Player2 or Player1
+    end
     self.x, self.y = targetX, targetY
-    currentPlayer = currentPlayer == player1 and player2 or player1
+
+    
+    
 
 end
 

@@ -9,4 +9,11 @@ end
 function Faction:looseCondition()
 end
 
+function Faction:placePieces()
+    for _, piece in ipairs(self.pieces) do
+        tile[piece.x][piece.y] = piece
+    end
+   
+end
+
 return Faction

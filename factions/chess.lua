@@ -36,11 +36,5 @@ function ChessFaction:getPieces()
     return self.pieces
 end
 
-function ChessFaction:placePieces()
-    for _, piece in ipairs(self.pieces) do
-        tile[piece.x][piece.y] = piece
-    end
-   
-end
 
 return ChessFaction

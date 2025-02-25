@@ -80,14 +80,16 @@ function King:move(targetX, targetY)
     if self.hasMoved == false and ((targetX == 2) or (targetX == 6)) then
         if targetX == 2 then
             tile[3][self.y] = tile[1][self.y]
+            tile[3][self.y].x, tile[3][self.y].y = 3, self.y
             tile[1][self.y] = nil
         else
             tile[5][self.y] = tile[8][self.y]
+            tile[5][self.y].x, tile[5][self.y].y = 5, self.y
             tile[8][self.y] = nil
         end
     end
     self.hasMoved = true
-    currentPlayer = currentPlayer == player1 and player2 or player1
+    CurrentPlayer = CurrentPlayer == Player1 and Player2 or Player1
 end
 
 return King

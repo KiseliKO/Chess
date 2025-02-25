@@ -16,7 +16,7 @@ function Piece:move(targetX, targetY)
     tile[self.x][self.y] = nil
     self.x, self.y = targetX, targetY
     self.hasMoved = true
-    currentPlayer = currentPlayer == player1 and player2 or player1
+    CurrentPlayer = CurrentPlayer == Player1 and Player2 or Player1
 end
 
 function Piece:canMove(targetX, targetY)
@@ -32,10 +32,10 @@ end
 function Piece:takePiece(targetX, targetY)
     local targetPiece = tile[targetX][targetY]
     if targetPiece then
-        if currentPlayer.color == "white" then
-            whitePoints = whitePoints + targetPiece.cost
+        if CurrentPlayer.color == "white" then
+            Player1.points = Player1.points + targetPiece.cost
         else
-            blackPoints = blackPoints + targetPiece.cost
+            Player2.points = Player2.points + targetPiece.cost
         end
 
         tile[targetX][targetY] = nil

@@ -25,11 +25,4 @@ function CheckersFaction:getPieces()
     return self.pieces
 end
 
-function CheckersFaction:placePieces()
-    for _, piece in ipairs(self.pieces) do
-        tile[piece.x][piece.y] = piece
-    end
-   
-end
-
 return CheckersFaction
